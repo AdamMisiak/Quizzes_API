@@ -1,0 +1,19 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    -   id: black
+        name: black
+        description: Black is a PEP 8 compliant opinionated formatter with its own style.
+-   repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+    -   id: isort
+        name: isort
+        description: isort is a Python utility / library to sort imports alphabetically, and automatically separated into sections and by type.
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        name: flake8
+        description: flake8 is a tool that glues together pycodestyle, pyflakes, mccabe, and third-party plugins to check the style and quality of some python code.
