@@ -7,11 +7,12 @@ class QuizAdmin(ExportActionMixin, admin.ModelAdmin):
     list_display = (
         "id",
         "name",
+        "owner",
         "created",
     )
     list_filter = ("name", "created")
-    ordering = ("name", "modified", "created")
-    search_fields = ("name",)
+    ordering = ("name", "owner", "modified", "created")
+    search_fields = ("name", "owner")
 
 
 admin.site.register(Quiz, QuizAdmin)

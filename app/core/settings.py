@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "import_export",
     "rest_framework",
+    # "users",
     "quizzes",
 ]
 
