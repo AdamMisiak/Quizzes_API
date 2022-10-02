@@ -1,16 +1,30 @@
+from django_filters import rest_framework as filters
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 
+from .filters import QuizFilter
 from .models import Answer, Question, Quiz
 from .serializers import QuizSerializer
 
 
 class QuizViewset(
     mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Quiz.objects.all()
+    queryset = (
+        Quiz.objects.all()
+        .select_related("owner")
+        .prefetch_related("participants", "questions", "questions__answers")
+        .order_by("-created")
+    )
     serializer_class = QuizSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = QuizFilter
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = QuizSerializer(data=request.data, context=self.get_serializer_context())
