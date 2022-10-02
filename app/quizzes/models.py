@@ -8,6 +8,7 @@ from django_extensions.db.models import TimeStampedModel
 class Quiz(TimeStampedModel):
     name = models.CharField(max_length=500)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="quizzes")
+    # participants = models.ManytoMany(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="quizzes")
 
     class Meta:
         verbose_name = "Quiz"

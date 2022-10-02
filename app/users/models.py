@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
-# from django.utils.translation import ugettext_lazy as _
+from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -24,3 +24,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
         ),
     )
+
+    USERNAME_FIELD = "email"
+
+    objects = UserManager()
+
+    def __str__(self):
+        return f"{self.full_name} - {self.email}"
+
+    @property
+    def full_name(self):
+        first_name = self.first_name or ""
+        last_name = self.last_name or ""
+        return f"{first_name} {last_name}".strip()

@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-r4#cik)3(oh713hpog(c*e2_r2kej#yxbn8#^p&@j71&_6$_xi
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = "users.User"
 
 # Application definition
 
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "import_export",
     "rest_framework",
-    # "users",
+    "users",
     "quizzes",
 ]
 
