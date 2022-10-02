@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django_filters",
     "import_export",
     "rest_framework",
+    "attempts",
     "users",
     "quizzes",
 ]

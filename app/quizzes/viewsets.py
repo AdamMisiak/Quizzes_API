@@ -13,6 +13,7 @@ class QuizViewset(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
+    # NOTE: change to quizzes/owned and quizzes/invited? or
     queryset = (
         Quiz.objects.all()
         .select_related("owner")
