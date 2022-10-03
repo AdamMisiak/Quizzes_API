@@ -15,9 +15,10 @@ urlpatterns = [
     re_path("^api/(?P<version>(v1|v2))/", include((api_urlpatterns, "api"), namespace="api")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-if settings.DEBUG:
-    urlpatterns.extend(
-        [
-            path("__debug__/", include("debug_toolbar.urls")),
-        ]
-    )
+# if settings.DEBUG:
+#     urlpatterns.extend(
+#         [
+#             path("__debug__/", include("debug_toolbar.urls")),
+#         ]
+#     )
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

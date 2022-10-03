@@ -18,7 +18,6 @@ class AttemptAnswer(models.Model):
     attempt = models.ForeignKey("attempts.Attempt", on_delete=models.CASCADE, related_name="answers")
     question = models.ForeignKey("quizzes.Question", on_delete=models.CASCADE, related_name="attempts")
     answer = models.ForeignKey("quizzes.Answer", on_delete=models.CASCADE, related_name="attempts")
-    # NOTE: signal or set in endpoint to answer the questions?
     is_correct = models.BooleanField(default=False, verbose_name=("is_correct"))
     created = models.DateTimeField(editable=False, blank=True, auto_now_add=True)
 

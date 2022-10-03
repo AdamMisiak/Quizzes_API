@@ -40,8 +40,8 @@ class QuizFilterTestCase(APITestCase):
         self.answer9 = AnswerFactory(content="Edynburg", is_correct=True, question=self.question4)
         self.answer9.save()
 
-    def test_get_filter_quizzes(self):
-        url = reverse("api:quizzes-list", args=["v1"])
+    def test_filter_owned_quizzes(self):
+        url = reverse("api:quizzes-owned-list", args=["v1"])
         self.client.force_authenticate(user=self.user)
 
         response = self.client.get(url, {"search": "edyn"})

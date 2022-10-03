@@ -77,7 +77,7 @@ class QuizListSerializer(QuizCreateSerializer):
     participants = UserSimpleSerializer(many=True)
 
     class Meta(QuizCreateSerializer.Meta):
-        fields = (*QuizCreateSerializer.Meta.fields, "participants")
+        fields = ("id", *QuizCreateSerializer.Meta.fields, "participants")
 
 
 class AttemptAnswerCreateSerializer(serializers.ModelSerializer):
