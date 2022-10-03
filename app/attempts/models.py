@@ -11,7 +11,7 @@ class Attempt(TimeStampedModel):
         verbose_name_plural = "Attempts"
 
     def __str__(self):
-        return f"{self.id} - ATTEMPT"
+        return f"{self.id}: ATTEMPT"
 
 
 class AttemptAnswer(models.Model):
@@ -27,4 +27,4 @@ class AttemptAnswer(models.Model):
         verbose_name_plural = "Attempt Answers"
 
     def __str__(self):
-        return f"{self.id} - ATTEMPT ANSWER"
+        return f"{self.id}: ATTEMPT ANSWER"

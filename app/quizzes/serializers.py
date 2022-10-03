@@ -1,8 +1,15 @@
 from attempts.models import Attempt, AttemptAnswer
 from rest_framework import serializers
 from users.serializers import UserSimpleSerializer
+from utils.serializers import CurrentUrlObject
 
 from .models import Answer, Question, Quiz
+
+
+class AnswerIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ("id",)
 
 
 class AnswerSimpleSerializer(serializers.ModelSerializer):
@@ -22,6 +29,12 @@ class AnswerSerializer(serializers.ModelSerializer):
             "content",
             "is_correct",
         )
+
+
+class QuestionIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ("id",)
 
 
 # NOTE make simple serializers parents of full serializers
@@ -53,7 +66,6 @@ class QuizCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz
         fields = (
-            "id",
             "name",
             "owner",
             "questions",
@@ -68,7 +80,19 @@ class QuizListSerializer(QuizCreateSerializer):
         fields = (*QuizCreateSerializer.Meta.fields, "participants")
 
 
-class AttemptAnswerSerializer(serializers.ModelSerializer):
+class AttemptAnswerCreateSerializer(serializers.ModelSerializer):
+    question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
+
+    class Meta:
+        model = AttemptAnswer
+        fields = (
+            "question",
+            "answer",
+        )
+
+
+class AttemptAnswerListSerializer(serializers.ModelSerializer):
     question = QuestionSimpleSerializer()
     answer = AnswerSimpleSerializer()
 
@@ -82,9 +106,23 @@ class AttemptAnswerSerializer(serializers.ModelSerializer):
         )
 
 
-class AttemptSerializer(serializers.ModelSerializer):
+class AttemptCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    quiz = serializers.HiddenField(default=CurrentUrlObject(Quiz, "invited_pk"))
+    answers = AttemptAnswerCreateSerializer(many=True)
+
+    class Meta:
+        model = Attempt
+        fields = (
+            "user",
+            "quiz",
+            "answers",
+        )
+
+
+class AttemptListSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer()
-    answers = AttemptAnswerSerializer(many=True)
+    answers = AttemptAnswerListSerializer(many=True)
 
     class Meta:
         model = Attempt
@@ -96,7 +134,17 @@ class AttemptSerializer(serializers.ModelSerializer):
 
 
 class QuizDetailsSerializer(QuizListSerializer):
-    attempts = AttemptSerializer(many=True)
+    attempts = AttemptListSerializer(many=True)
 
     class Meta(QuizListSerializer.Meta):
         fields = (*QuizListSerializer.Meta.fields, "attempts")
+
+
+# {
+#     "answers": [
+#         {
+#             "question": 2,
+#             "answer": 4
+#         }
+#     ]
+# }

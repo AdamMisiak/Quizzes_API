@@ -56,7 +56,7 @@ class QuizOwnedViewset(
 
 
 class QuizInvitedViewset(
-    # mixins.CreateModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,

@@ -13,7 +13,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     re_path("^api/(?P<version>(v1|v2))/", include((api_urlpatterns, "api"), namespace="api")),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns.extend(
+        [
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
+    )
