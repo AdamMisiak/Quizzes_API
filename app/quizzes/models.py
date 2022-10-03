@@ -9,6 +9,10 @@ class Quiz(TimeStampedModel):
     owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="quizzes")
     participants = models.ManyToManyField("users.User", blank=True)
 
+    # @property
+    # def numer_of_attempts(self):
+    #     return self.attempts.count()
+
     class Meta:
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
