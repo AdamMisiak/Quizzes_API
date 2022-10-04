@@ -149,3 +149,15 @@ INTERNAL_IPS = [
 ]
 
 # NOTE add swagger
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "adammisiak3@gmail.com"
+EMAIL_HOST_PASSWORD = ""
+
+# NOTE add instructions how to configure email
+
+# NOTE add permissions to attend
