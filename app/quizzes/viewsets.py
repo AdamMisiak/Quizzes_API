@@ -71,7 +71,6 @@ class QuizOwnedInviteParticipantsViewset(
     def create(self, request, *args, **kwargs):
         serializer = QuizOwnedInviteParticipantsSerializer(data=request.data, context=self.get_serializer_context())
         if serializer.is_valid(raise_exception=True):
-            print(serializer.validated_data)
             emails = serializer.validated_data.get("emails")
             existing_users = User.objects.filter(email__in=emails)
             existing_emails = list(existing_users.values_list("email", flat=True).distinct())

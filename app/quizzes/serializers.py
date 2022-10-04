@@ -1,6 +1,6 @@
 from attempts.models import Attempt, AttemptAnswer
 from rest_framework import serializers
-from users.serializers import UserSimpleSerializer
+from users.serializers import UserSimpleSerializer, UserWithStatsSerializer
 from utils.serializers import CurrentUrlObject
 
 from .models import Answer, Question, Quiz
@@ -128,12 +128,15 @@ class AttemptListSerializer(serializers.ModelSerializer):
         model = Attempt
         fields = (
             "id",
+            "is_finished",
+            "is_successful",
             "user",
             "answers",
         )
 
 
 class QuizDetailsSerializer(QuizListSerializer):
+    participants = UserWithStatsSerializer(many=True)
     attempts = AttemptListSerializer(many=True)
 
     class Meta(QuizListSerializer.Meta):
@@ -145,6 +148,10 @@ class QuizDetailsSerializer(QuizListSerializer):
 #         {
 #             "question": 2,
 #             "answer": 4
+#         },
+#         {
+#             "question": 4,
+#             "answer": 10
 #         }
 #     ]
 # }

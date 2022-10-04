@@ -13,8 +13,11 @@ class AttemptAdmin(admin.ModelAdmin):
         "id",
         "user",
         "quiz",
+        "is_finished",
+        "is_successful",
+        "created",
     )
-    ordering = ("user", "quiz", "modified", "created")
+    ordering = ("is_finished", "is_successful", "user", "quiz", "modified", "created")
     search_fields = ("user__email", "user__first_name", "user__last_name", "quiz__name")
     inlines = (AttemptAnswerInline,)
 

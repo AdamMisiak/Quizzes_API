@@ -5,6 +5,8 @@ from django_extensions.db.models import TimeStampedModel
 class Attempt(TimeStampedModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="attempts")
     quiz = models.ForeignKey("quizzes.Quiz", on_delete=models.CASCADE, related_name="attempts")
+    is_finished = models.BooleanField(default=False, verbose_name=("is_finished"))
+    is_successful = models.BooleanField(default=False, verbose_name=("is_successful"))
 
     class Meta:
         verbose_name = "Attempt"
