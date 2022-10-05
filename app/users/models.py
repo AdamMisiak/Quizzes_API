@@ -40,7 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"{first_name} {last_name}".strip()
 
 
-class QuizInvite(models.Model):
+class QuizInvitation(models.Model):
+    # NOTE related names can be refactored
     owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invites")
     invited = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invited")
     quiz = models.ForeignKey("quizzes.Quiz", on_delete=models.CASCADE, related_name="invites")
@@ -53,8 +54,8 @@ class QuizInvite(models.Model):
     created = models.DateTimeField(editable=False, blank=True, auto_now_add=True)
 
     class Meta:
-        verbose_name = "Quiz Invite"
-        verbose_name_plural = "Quiz Invites"
+        verbose_name = "Quiz Invitation"
+        verbose_name_plural = "Quiz Invitations"
 
     def __str__(self):
-        return f"{self.id}: QUIZ INVITE"
+        return f"{self.id}: QUIZ INVITATION"

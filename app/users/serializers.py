@@ -4,6 +4,8 @@ from quizzes.models import Answer, Quiz
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
+from .models import QuizInvitation
+
 User = get_user_model()
 
 
@@ -37,3 +39,27 @@ class UserWithStatsSerializer(serializers.ModelSerializer):
 
 class QuizOwnedInviteParticipantsSerializer(serializers.Serializer):
     emails = serializers.ListField(child=serializers.EmailField())
+
+
+class QuizSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = (
+            "id",
+            "name",
+        )
+
+
+class QuizInvitationSerializer(serializers.ModelSerializer):
+    owner = UserSimpleSerializer()
+    quiz = QuizSimpleSerializer()
+
+    class Meta:
+        model = QuizInvitation
+        fields = (
+            "id",
+            "owner",
+            "quiz",
+            "status",
+            "created",
+        )

@@ -4,7 +4,7 @@ from django_filters import rest_framework as filters
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
 from users.enums import StatusChoices
-from users.models import QuizInvite
+from users.models import QuizInvitation
 from users.serializers import QuizOwnedInviteParticipantsSerializer
 
 from .filters import QuizFilter
@@ -79,14 +79,13 @@ class QuizOwnedInviteParticipantsViewset(
             # existing_emails = [email for email in emails if User.objects.filter(email=email).exists()]
             if existing_users:
                 quiz = Quiz.objects.get(id=kwargs.get("owned_pk"))
-                QuizInvite.objects.bulk_create(
+                QuizInvitation.objects.bulk_create(
                     [
-                        QuizInvite(owner=quiz.owner, invited=user, quiz=quiz, status=StatusChoices.SENT.value)
+                        QuizInvitation(owner=quiz.owner, invited=user, quiz=quiz, status=StatusChoices.SENT.value)
                         for user in existing_users
                     ]
                 )
 
-                # quiz.participants.add(*existing_users)
                 subject = "You have beed invitied to the quiz!"
                 message = f"You have beed invited by '{quiz.owner.full_name}' to the quiz named '{quiz.name}'."
                 # NOTE add to now model invites - quiz, and 2 ppl

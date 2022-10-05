@@ -7,6 +7,7 @@ from django.urls import include, path, re_path
 
 api_urlpatterns = [
     path("", include("quizzes.urls")),
+    path("", include("users.urls")),
 ]
 
 urlpatterns = [
