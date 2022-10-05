@@ -3,6 +3,8 @@ from django.core.mail import send_mail
 from django_filters import rest_framework as filters
 from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
+from users.enums import StatusChoices
+from users.models import QuizInvite
 from users.serializers import QuizOwnedInviteParticipantsSerializer
 
 from .filters import QuizFilter
@@ -66,7 +68,7 @@ class QuizOwnedInviteParticipantsViewset(
 ):
 
     serializer_class = QuizOwnedInviteParticipantsSerializer
-    # ONLY for internal users. Next steps could be creating register endpoint and sending inv with link to it
+    # NOTE ONLY for internal users. Next steps could be creating register endpoint and sending inv with link to it
 
     def create(self, request, *args, **kwargs):
         serializer = QuizOwnedInviteParticipantsSerializer(data=request.data, context=self.get_serializer_context())
@@ -77,9 +79,19 @@ class QuizOwnedInviteParticipantsViewset(
             # existing_emails = [email for email in emails if User.objects.filter(email=email).exists()]
             if existing_users:
                 quiz = Quiz.objects.get(id=kwargs.get("owned_pk"))
-                quiz.participants.add(*existing_users)
+                QuizInvite.objects.bulk_create(
+                    [
+                        QuizInvite(owner=quiz.owner, invited=user, quiz=quiz, status=StatusChoices.SENT.value)
+                        for user in existing_users
+                    ]
+                )
+
+                # quiz.participants.add(*existing_users)
                 subject = "You have beed invitied to the quiz!"
                 message = f"You have beed invited by '{quiz.owner.full_name}' to the quiz named '{quiz.name}'."
+                # NOTE add to now model invites - quiz, and 2 ppl
+                # new endpoint in users, invites endpoint with accept or decline POST
+
                 # send_mail(
                 #     subject=subject,
                 #     message=message,

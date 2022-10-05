@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
+from .enums import StatusChoices
 from .managers import UserManager
 
 
@@ -37,3 +38,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         first_name = self.first_name or ""
         last_name = self.last_name or ""
         return f"{first_name} {last_name}".strip()
+
+
+class QuizInvite(models.Model):
+    owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invites")
+    invited = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invited")
+    quiz = models.ForeignKey("quizzes.Quiz", on_delete=models.CASCADE, related_name="invites")
+    status = models.PositiveSmallIntegerField(
+        verbose_name=("status"),
+        choices=StatusChoices.choices,
+        blank=True,
+        null=True,
+    )
+    created = models.DateTimeField(editable=False, blank=True, auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Quiz Invite"
+        verbose_name_plural = "Quiz Invites"
+
+    def __str__(self):
+        return f"{self.id}: QUIZ INVITE"
