@@ -9,7 +9,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-    command: sh entrypoint.sh
+    command: bash entrypoint.sh
     depends_on:
       - db
 

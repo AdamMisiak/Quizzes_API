@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django_filters import rest_framework as filters
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.response import Response
 from users.enums import StatusChoices
 from users.models import QuizInvitation
@@ -27,6 +27,7 @@ class QuizOwnedViewset(
         .order_by("-created")
     )
     serializer_class = QuizListSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = QuizFilter
 
@@ -68,6 +69,7 @@ class QuizOwnedInviteParticipantsViewset(
 ):
 
     serializer_class = QuizOwnedInviteParticipantsSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     # NOTE ONLY for internal users. Next steps could be creating register endpoint and sending inv with link to it
 
     def create(self, request, *args, **kwargs):
@@ -88,8 +90,6 @@ class QuizOwnedInviteParticipantsViewset(
 
                 subject = "You have beed invitied to the quiz!"
                 message = f"You have beed invited by '{quiz.owner.full_name}' to the quiz named '{quiz.name}'."
-                # NOTE add to now model invites - quiz, and 2 ppl
-                # new endpoint in users, invites endpoint with accept or decline POST
 
                 # send_mail(
                 #     subject=subject,
@@ -118,8 +118,18 @@ class QuizInvitedViewset(
         .order_by("-created")
     )
     serializer_class = QuizListSerializer
+    permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = QuizFilter
 
     def get_queryset(self):
         return self.queryset.filter(participants=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action in ["list"]:
+            return QuizListSerializer
+        elif self.action in ["retrieve"]:
+            return QuizDetailsSerializer
+
+    # NOTE: add more tests, crucial ones
+    # NOTE: optimalization of endpoints

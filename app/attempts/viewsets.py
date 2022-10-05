@@ -1,5 +1,5 @@
 from quizzes.serializers import AttemptCreateSerializer
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.response import Response
 
 from .models import Attempt, AttemptAnswer
@@ -10,6 +10,7 @@ class QuizInvitedAttemptViewset(
     viewsets.GenericViewSet,
 ):
     serializer_class = AttemptCreateSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     # NOTE check what will happen when wrong id will be provided - from different quiz
     def create(self, request, *args, **kwargs):
@@ -38,6 +39,7 @@ class QuizInvitedAttemptViewset(
                 quiz_questions_correct_answered = quiz.questions.filter(attempts__in=correct_attempt_answer_objects)
                 if set(quiz_questions) == set(quiz_questions_correct_answered):
                     attempt.is_successful = True
+                    # NOTE send email to participant that he succeed quiz
                 attempt.save()
 
             return Response(data=request.data, status=status.HTTP_201_CREATED)

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -15,14 +15,9 @@ class QuizInvitationViewset(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = (
-        # NOTE need to add select related
-        QuizInvitation.objects.all()
-        # .select_related("owner")
-        # .prefetch_related("participants", "questions", "questions__answers")
-        # .order_by("-created")
-    )
+    queryset = QuizInvitation.objects.all().select_related("owner", "invited", "quiz").order_by("-created")
     serializer_class = QuizInvitationSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return self.queryset.filter(invited=self.request.user, status=StatusChoices.SENT.value)
