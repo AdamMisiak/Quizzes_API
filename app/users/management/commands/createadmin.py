@@ -10,5 +10,5 @@ class Command(BaseCommand):
         if superuser.count() > 0:
             self.stdout.write("This admin already exists in database!")
         else:
-            User.objects.create_superuser(email="admin@admin.com", password="admin")
+            User.objects.create_superuser(id=1, email="admin@admin.com", password="admin")
             self.stdout.write("Admin created successfully!")

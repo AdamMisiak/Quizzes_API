@@ -1,0 +1,90 @@
+[
+    {
+        "model": "quizzes.Answer",
+        "pk": 1,
+        "fields": { 
+            "content": "40",
+            "question": 1,
+            "is_correct": "True",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 2,
+        "fields": { 
+            "content": "4",
+            "question": 1,
+            "is_correct": "False",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 3,
+        "fields": { 
+            "content": "10",
+            "question": 2,
+            "is_correct": "False",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 4,
+        "fields": { 
+            "content": "0",
+            "question": 2,
+            "is_correct": "True",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 5,
+        "fields": { 
+            "content": "Warsaw",
+            "question": 3,
+            "is_correct": "True",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 6,
+        "fields": { 
+            "content": "Praga",
+            "question": 3,
+            "is_correct": "False",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 7,
+        "fields": { 
+            "content": "USD",
+            "question": 4,
+            "is_correct": "True",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Answer",
+        "pk": 8,
+        "fields": { 
+            "content": "GBP",
+            "question": 4,
+            "is_correct": "False",
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    }
+]

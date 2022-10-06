@@ -41,7 +41,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class QuizInvitation(models.Model):
-    # NOTE related names can be refactored
     owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invites")
     invited = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="invited")
     quiz = models.ForeignKey("quizzes.Quiz", on_delete=models.CASCADE, related_name="invites")

@@ -46,9 +46,20 @@ Email: admin@admin.com
 Password: admin
 ```
 
+To init mock data:
+```
+make init-data
+```
+
 To run tests:
 ```
 make test
+```
+
+To check swagger/docs:
+```
+http://localhost:8000/swagger/
+http://localhost:8000/doc/
 ```
 
 ## Contact

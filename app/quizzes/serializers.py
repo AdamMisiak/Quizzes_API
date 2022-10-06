@@ -12,23 +12,14 @@ class AnswerIdSerializer(serializers.ModelSerializer):
         fields = ("id",)
 
 
-class AnswerSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
-        fields = (
-            "id",
-            "content",
-        )
+class AnswerSimpleSerializer(AnswerIdSerializer):
+    class Meta(AnswerIdSerializer.Meta):
+        fields = (*AnswerIdSerializer.Meta.fields, "content")
 
 
-class AnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
-        fields = (
-            "id",
-            "content",
-            "is_correct",
-        )
+class AnswerSerializer(AnswerSimpleSerializer):
+    class Meta(AnswerSimpleSerializer.Meta):
+        fields = (*AnswerSimpleSerializer.Meta.fields, "is_correct")
 
 
 class QuestionIdSerializer(serializers.ModelSerializer):
@@ -37,26 +28,16 @@ class QuestionIdSerializer(serializers.ModelSerializer):
         fields = ("id",)
 
 
-# NOTE make simple serializers parents of full serializers
-class QuestionSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = (
-            "id",
-            "content",
-        )
+class QuestionSimpleSerializer(QuestionIdSerializer):
+    class Meta(QuestionIdSerializer.Meta):
+        fields = (*QuestionIdSerializer.Meta.fields, "content")
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(QuestionSimpleSerializer):
     answers = AnswerSerializer(required=True, many=True)
 
-    class Meta:
-        model = Question
-        fields = (
-            "id",
-            "content",
-            "answers",
-        )
+    class Meta(QuestionSimpleSerializer.Meta):
+        fields = (*QuestionSimpleSerializer.Meta.fields, "answers")
 
 
 class QuizCreateSerializer(serializers.ModelSerializer):
@@ -81,6 +62,7 @@ class QuizListSerializer(QuizCreateSerializer):
 
 
 class AttemptAnswerCreateSerializer(serializers.ModelSerializer):
+    # TODO here can be implemented custom field SerializerMethodField with correct filter :)
     question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
     answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
 
@@ -141,17 +123,3 @@ class QuizDetailsSerializer(QuizListSerializer):
 
     class Meta(QuizListSerializer.Meta):
         fields = (*QuizListSerializer.Meta.fields, "attempts")
-
-
-# {
-#     "answers": [
-#         {
-#             "question": 2,
-#             "answer": 4
-#         },
-#         {
-#             "question": 4,
-#             "answer": 10
-#         }
-#     ]
-# }

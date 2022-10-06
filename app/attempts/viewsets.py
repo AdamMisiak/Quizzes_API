@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from quizzes.serializers import AttemptCreateSerializer
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.response import Response
@@ -12,7 +14,6 @@ class QuizInvitedAttemptViewset(
     serializer_class = AttemptCreateSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    # NOTE check what will happen when wrong id will be provided - from different quiz
     def create(self, request, *args, **kwargs):
         serializer = AttemptCreateSerializer(data=request.data, context=self.get_serializer_context())
         if serializer.is_valid(raise_exception=True):
@@ -34,12 +35,23 @@ class QuizInvitedAttemptViewset(
             quiz = serializer.validated_data.get("quiz")
             quiz_questions = quiz.questions.all()
             quiz_questions_answered = quiz.questions.filter(attempts__in=attempt_answer_objects)
-            if set(quiz_questions) == set(quiz_questions_answered):
+            if not attempt.is_finished and set(quiz_questions) == set(quiz_questions_answered):
                 attempt.is_finished = True
                 quiz_questions_correct_answered = quiz.questions.filter(attempts__in=correct_attempt_answer_objects)
-                if set(quiz_questions) == set(quiz_questions_correct_answered):
+                if not attempt.is_successful and set(quiz_questions) == set(quiz_questions_correct_answered):
                     attempt.is_successful = True
-                    # NOTE send email to participant that he succeed quiz
+                    subject = "Congratulations!"
+                    message = (
+                        f"Congratulations! "
+                        f"You have succeed the quiz named '{quiz.name}' created by {quiz.owner.full_name}."
+                    )
+                    send_mail(
+                        subject=subject,
+                        message=message,
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=[serializer.validated_data.get("user").email],
+                        fail_silently=True,
+                    )
                 attempt.save()
 
             return Response(data=request.data, status=status.HTTP_201_CREATED)

@@ -7,7 +7,6 @@ from django_extensions.db.models import TimeStampedModel
 class Quiz(TimeStampedModel):
     name = models.CharField(max_length=500)
     owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="quizzes")
-    # NOTE add permissions - attempt can only participants
     participants = models.ManyToManyField("users.User", blank=True)
 
     class Meta:

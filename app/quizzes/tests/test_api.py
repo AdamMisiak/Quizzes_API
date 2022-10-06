@@ -24,7 +24,6 @@ class QuizOwnedApiTestCase(APITestCase):
             ],
         }
         response = self.client.post(url, data, format="json")
-        # NOTE parameterized can be implemented here
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data, data)

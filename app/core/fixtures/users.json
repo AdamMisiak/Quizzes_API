@@ -1,0 +1,22 @@
+[
+    {
+        "model": "users.User",
+        "pk": 10,
+        "fields": { 
+            "email": "user1@user.com",
+            "first_name": "User1",
+            "last_name": "User1",
+            "password": "user1"
+        }
+    },
+    {
+        "model": "users.User",
+        "pk": 11,
+        "fields": { 
+            "email": "user2@user.com",
+            "first_name": "User2",
+            "last_name": "User2",
+            "password": "user2"
+        }
+    }
+]

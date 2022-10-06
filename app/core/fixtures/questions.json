@@ -1,0 +1,42 @@
+[
+    {
+        "model": "quizzes.Question",
+        "pk": 1,
+        "fields": { 
+            "content": "20 + 20 = ?",
+            "quiz": 1,
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Question",
+        "pk": 2,
+        "fields": { 
+            "content": "20 - 20 = ?",
+            "quiz": 1,
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Question",
+        "pk": 3,
+        "fields": { 
+            "content": "What is the capital city of Poland?",
+            "quiz": 2,
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Question",
+        "pk": 4,
+        "fields": { 
+            "content": "What is the currency of USA?",
+            "quiz": 2,
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    }
+]

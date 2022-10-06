@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django_filters import rest_framework as filters
@@ -21,10 +22,7 @@ class QuizOwnedViewset(
     viewsets.GenericViewSet,
 ):
     queryset = (
-        Quiz.objects.all()
-        .select_related("owner")
-        .prefetch_related("participants", "questions", "questions__answers")
-        .order_by("-created")
+        Quiz.objects.all().select_related("owner").prefetch_related("participants", "questions", "questions__answers")
     )
     serializer_class = QuizListSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -32,7 +30,16 @@ class QuizOwnedViewset(
     filterset_class = QuizFilter
 
     def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user)
+        queryset = self.queryset.filter(owner=self.request.user)
+        if self.action in ["retrieve"]:
+            return queryset.prefetch_related(
+                "attempts",
+                "attempts__user",
+                "attempts__answers",
+                "attempts__answers__question",
+                "attempts__answers__answer",
+            )
+        return queryset.order_by("-created")
 
     def get_serializer_class(self):
         if self.action in ["create"]:
@@ -70,7 +77,8 @@ class QuizOwnedInviteParticipantsViewset(
 
     serializer_class = QuizOwnedInviteParticipantsSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    # NOTE ONLY for internal users. Next steps could be creating register endpoint and sending inv with link to it
+    # NOTE Invitiations ONLY for internal users.
+    # Next steps could be creating registration endpoint and attach it email
 
     def create(self, request, *args, **kwargs):
         serializer = QuizOwnedInviteParticipantsSerializer(data=request.data, context=self.get_serializer_context())
@@ -78,7 +86,6 @@ class QuizOwnedInviteParticipantsViewset(
             emails = serializer.validated_data.get("emails")
             existing_users = User.objects.filter(email__in=emails)
             existing_emails = list(existing_users.values_list("email", flat=True).distinct())
-            # existing_emails = [email for email in emails if User.objects.filter(email=email).exists()]
             if existing_users:
                 quiz = Quiz.objects.get(id=kwargs.get("owned_pk"))
                 QuizInvitation.objects.bulk_create(
@@ -90,15 +97,13 @@ class QuizOwnedInviteParticipantsViewset(
 
                 subject = "You have beed invitied to the quiz!"
                 message = f"You have beed invited by '{quiz.owner.full_name}' to the quiz named '{quiz.name}'."
-
-                # send_mail(
-                #     subject=subject,
-                #     message=message,
-                #     from_email=settings.EMAIL_HOST_USER,
-                #     recipient_list=existing_emails,
-                #     # fail_silently=False,
-                # )
-                # NOTE return only filtered values
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=existing_emails,
+                    fail_silently=True,
+                )
                 return Response(data=serializer.validated_data, status=status.HTTP_201_CREATED)
             return Response("Email address(es) wasn't find in the database.", status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -106,16 +111,12 @@ class QuizOwnedInviteParticipantsViewset(
 
 
 class QuizInvitedViewset(
-    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     queryset = (
-        Quiz.objects.all()
-        .select_related("owner")
-        .prefetch_related("participants", "questions", "questions__answers")
-        .order_by("-created")
+        Quiz.objects.all().select_related("owner").prefetch_related("participants", "questions", "questions__answers")
     )
     serializer_class = QuizListSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -123,13 +124,19 @@ class QuizInvitedViewset(
     filterset_class = QuizFilter
 
     def get_queryset(self):
-        return self.queryset.filter(participants=self.request.user)
+        queryset = self.queryset.filter(participants=self.request.user)
+        if self.action in ["retrieve"]:
+            return queryset.prefetch_related(
+                "attempts",
+                "attempts__user",
+                "attempts__answers",
+                "attempts__answers__question",
+                "attempts__answers__answer",
+            )
+        return queryset.order_by("-created")
 
     def get_serializer_class(self):
         if self.action in ["list"]:
             return QuizListSerializer
         elif self.action in ["retrieve"]:
             return QuizDetailsSerializer
-
-    # NOTE: add more tests, crucial ones
-    # NOTE: optimalization of endpoints

@@ -1,0 +1,25 @@
+[
+    {
+        "model": "quizzes.Quiz",
+        "pk": 1,
+        "fields": { 
+            "name": "Math Quiz",
+            "owner": 10,
+            "participants": [1, 11],
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    },
+    {
+        "model": "quizzes.Quiz",
+        "pk": 2,
+        "fields": { 
+            "name": "Geographic Quiz",
+            "owner": 1,
+            "participants": [10, 11],
+            "created": "2022-10-06T10:00:00+00:00",
+            "modified": "2022-10-06T10:00:00+00:00"
+        }
+    }
+
+]
