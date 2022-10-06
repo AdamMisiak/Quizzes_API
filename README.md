@@ -1,4 +1,4 @@
-# Elevator simulation
+# Quizzes API
 
 Recruitment task for Backend Developer. Basic API to build and host quizzes. 
 

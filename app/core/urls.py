@@ -22,9 +22,9 @@ if settings.DEBUG:
 
     schema_view = get_schema_view(
         openapi.Info(
-            title="Quiz API",
+            title="Quizzes API",
             default_version="v1",
-            description="Quiz API Documentation",
+            description="Quizzes API Documentation",
         ),
         validators=["flex"],
         public=True,
